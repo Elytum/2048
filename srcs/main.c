@@ -11,8 +11,9 @@
 /* ************************************************************************** */
 
 #include <stdio.h>
+#define BUFF_SIZE 2048
 
-int		ft_continue(int map[][9])
+int		ft_continue(int map[][BUFF_SIZE], char sx, char sy)
 {
 	int	r;
 
@@ -112,19 +113,19 @@ void		ft_putnbr(int n)
 	}
 }
 
-void		ft_drawmap(int map[9])
+void		ft_drawmap(int map[BUFF_SIZE], char sx, char sy)
 {
 	int		x;
 	int		y;
 
 	write(1, "\nThe map is : \n", 15);
 	y = 0;
-	while (y < 3)
+	while (y < sy)
 	{
 		x = 0;
-		while (x < 3)
+		while (x < sx)
 		{
-			ft_putnbr(map[y * 3 + x++]);
+			ft_putnbr(map[y * sy + x++]);
 			write (1, "\t", 1);
 		}
 		write (1, "\n", 1);
@@ -132,8 +133,9 @@ void		ft_drawmap(int map[9])
 	}
 }
 
-char		ft_move(int map[][9], char past, char next)
+char		ft_move(int map[][BUFF_SIZE], char past, char next)
 {
+	write (1, "\nMOVE\n", 6);
 	if ((*map)[next])
 	{
 		(*map)[next] *= 2;
@@ -147,98 +149,114 @@ char		ft_move(int map[][9], char past, char next)
 	return (1);
 }
 
-char		ft_up(int map[][9])
+char		ft_up(int map[][BUFF_SIZE], char sx, char sy)
 {
 	char	l;
 	char	re;
+	char	x;
+	char	y;
 
 	l = 1;
+	re = 0;
 	while (l && !(l = 0))
 	{
-		if ((*map)[3] && ((*map)[0] == 0 && ((*map)[3] == (*map)[0])) && (l = 1))
-			re = ft_move(map, 3, 0);
-		if ((*map)[4] && ((*map)[1] == 0 && ((*map)[4] == (*map)[1])) && (l = 1))
-			re = ft_move(map, 4, 1);
-		if ((*map)[5] && ((*map)[2] == 0 && ((*map)[5] == (*map)[2])) && (l = 1))
-			re = ft_move(map, 5, 2);
-		if ((*map)[6] && ((*map)[3] == 0 && ((*map)[6] == (*map)[3])) && (l = 1))
-			re = ft_move(map, 6, 3);
-		if ((*map)[7] && ((*map)[4] == 0 && ((*map)[7] == (*map)[4])) && (l = 1))
-			re = ft_move(map, 7, 4);
-		if ((*map)[8] && ((*map)[5] == 0 && ((*map)[8] == (*map)[5])) && (l = 1))
-			re = ft_move(map, 8, 5);
+		y = 1;
+		while (sy < y)
+		{
+			x = 0;
+			while (x < sx)
+			{
+				if ((*map)[sx * y + x] && ((*map)[sx * (y - 1) + x] == 0 ||
+					((*map)[sx * y + x] == (*map)[sx * (y - 1) + x])) && (l = 1))
+					re = ft_move(map, 3, 0);
+				x++;
+			}
+			y++;
+		}
 	}
 	return (re);
 }
 
-char		ft_down(int map[][9])
+char		ft_down(int map[][BUFF_SIZE], char sx, char sy)
 {
 	char	l;
 	char	re;
+	char	x;
+	char	y;
 
 	l = 1;
+	re = 0;
 	while (l && !(l = 0))
 	{
-		if ((*map)[6] && ((*map)[3] == 0 && ((*map)[6] == (*map)[3])) && (l = 1))
-			re = ft_move(map, 6, 3);
-		if ((*map)[7] && ((*map)[4] == 0 && ((*map)[7] == (*map)[4])) && (l = 1))
-			re = ft_move(map, 7, 4);
-		if ((*map)[8] && ((*map)[5] == 0 && ((*map)[8] == (*map)[5])) && (l = 1))
-			re = ft_move(map, 8, 5);
-		if ((*map)[3] && ((*map)[0] == 0 && ((*map)[0] == (*map)[0])) && (l = 1))
-			re = ft_move(map, 3, 0);
-		if ((*map)[4] && ((*map)[1] == 0 && ((*map)[1] == (*map)[1])) && (l = 1))
-			re = ft_move(map, 4, 1);
-		if ((*map)[5] && ((*map)[2] == 0 && ((*map)[2] == (*map)[2])) && (l = 1))
-			re = ft_move(map, 5, 2);
+		y = sy;
+		while (y >= 0);
+		{
+			x = 0;
+			while (x < sx)
+			{
+				if ((*map)[sx * y + x] && ((*map)[sx * (y + 1) + x] == 0 ||
+					((*map)[sx * y + x] == (*map)[sx * (y + 1) + x])) && (l = 1))
+					re = ft_move(map, 3, 0);
+				x++;
+			}
+			y--;
+		}
 	}
 	return (re);
 }
 
-char		ft_left(int map[][9])
+char		ft_left(int map[][BUFF_SIZE], char sx, char sy)
 {
 	char	l;
 	char	re;
+	char	x;
+	char	y;
 
 	l = 1;
+	re = 0;
+	x = 1;
 	while (l && !(l = 0))
 	{
-		if ((*map)[0] && ((*map)[1] == 0 && ((*map)[0] == (*map)[1])) && (l = 1))
-			re = ft_move(map, 0, 1);
-		if ((*map)[1] && ((*map)[2] == 0 && ((*map)[1] == (*map)[2])) && (l = 1))
-			re = ft_move(map, 1, 2);
-		if ((*map)[3] && ((*map)[4] == 0 && ((*map)[3] == (*map)[4])) && (l = 1))
-			re = ft_move(map, 3, 4);
-		if ((*map)[4] && ((*map)[5] == 0 && ((*map)[4] == (*map)[5])) && (l = 1))
-			re = ft_move(map, 4, 5);
-		if ((*map)[6] && ((*map)[7] == 0 && ((*map)[6] == (*map)[7])) && (l = 1))
-			re = ft_move(map, 6, 7);
-		if ((*map)[7] && ((*map)[8] == 0 && ((*map)[7] == (*map)[8])) && (l = 1))
-			re = ft_move(map, 7, 8);
+		while (x < sx);
+		{
+			y = 0;
+			while (y < sy)
+			{
+				if ((*map)[sx * y + x] && ((*map)[sx * y + x + 1] == 0 ||
+					((*map)[sx * y + x] == (*map)[sx * y + x + 1])) && (l = 1))
+					re = ft_move(map, 3, 0);
+				y++;
+			}
+			x++;
+		}
 	}
 	return (re);
 }
 
-char		ft_right(int map[][9])
+char		ft_right(int map[][BUFF_SIZE], char sx, char sy)
 {
 	char	l;
 	char	re;
+	char	x;
+	char	y;
 
 	l = 1;
+	re = 0;
+	x = sx - 1;
 	while (l && !(l = 0))
 	{
-		if ((*map)[1] && ((*map)[1] == 0 && ((*map)[1] == (*map)[2])) && (l = 1))
-			re = ft_move(map, 1, 2);
-		if ((*map)[0] && ((*map)[0] == 0 && ((*map)[0] == (*map)[1])) && (l = 1))
-			re = ft_move(map, 0, 1);
-		if ((*map)[4] && ((*map)[4] == 0 && ((*map)[4] == (*map)[5])) && (l = 1))
-			re = ft_move(map, 4, 5);
-		if ((*map)[3] && ((*map)[3] == 0 && ((*map)[3] == (*map)[4])) && (l = 1))
-			re = ft_move(map, 3, 4);
-		if ((*map)[7] && ((*map)[7] == 0 && ((*map)[7] == (*map)[8])) && (l = 1))
-			re = ft_move(map, 7, 8);
-		if ((*map)[6] && ((*map)[6] == 0 && ((*map)[6] == (*map)[7])) && (l = 1))
-			re = ft_move(map, 6, 7);
+		while (x >= 0);
+		{
+			y = 0;
+			while (y < sy)
+			{
+				if ((*map)[sx * y + x] && ((*map)[sx * y + x - 1] == 0 ||
+					((*map)[sx * y + x] == (*map)[sx * y + x - 1])) && (l = 1))
+					re = ft_move(map, 3, 0);
+				y++;
+			}
+			x--;
+		}
 	}
 	return (re);
 }
@@ -246,29 +264,29 @@ char		ft_right(int map[][9])
 
 int			main(void)
 {
-	int		map[16] = {0};
+	int		map[BUFF_SIZE] = {0};
 	char	buff[2] = {0};
 	int		check;
 	int		play;
 
 	check = 0;
 	play = 1;
-	ft_continue(&map);
-	ft_drawmap(map);
+	ft_continue(&map, 4, 4);
+	ft_drawmap(map, 4, 4);
 	while (play)
 	{
 		read(1, buff, 2);
 		if (*buff == 'w')
-			check = ft_up(&map);
+			check = ft_up(&map, 4, 4);
 		else if (*buff == 's')
-			check = ft_down(&map);
+			check = ft_down(&map, 4, 4);
 		else if (*buff == 'a')
-			check = ft_left(&map);
+			check = ft_left(&map, 4, 4);
 		else if (*buff == 'd')
-			check = ft_right(&map);
+			check = ft_right(&map, 4, 4);
 		if (check && !(check = 0))
-			play = ft_continue(&map);
-		ft_drawmap(map);
+			play = ft_continue(&map, 4, 4);
+		ft_drawmap(map, 4, 4);
 		buff[0] = '\0';
 	}
 }
