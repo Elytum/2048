@@ -13,31 +13,63 @@
 #include <stdio.h>
 #define BUFF_SIZE 2048
 
+int		ft_anyat(int map[][BUFF_SIZE], char sx, char sy, int value)
+{
+	int	max;
+
+	max = sx * sy;
+	while (max >= 0)
+		if ((*map)[max--] == value)
+			return (1);
+	return (0);
+}
+
+int		ft_neighboor(int map[][BUFF_SIZE], char sx, char sy)
+{
+	int	x;
+	int	y;
+
+	x = 0;
+	y = 0;
+	while (y < sy)
+	{
+		if (x > 0)
+		{
+			if ((*map)[sx * y + x] == (*map)[sx * y + x - 1])
+				return (1);
+		}
+		if (y > 0)
+		{
+			if ((*map)[sx * y + x] == (*map)[sx * (y - 1) + x])
+				return (1);
+		}
+		x++;
+		if (x > sx && ++y)
+			x = 0;
+	}
+	return (0);
+}
+
 int		ft_continue(int map[][BUFF_SIZE], char sx, char sy)
 {
 	int	r;
+	int	s;
+	int	m;
 
-	if (!(!(*map)[0] || !(*map)[1] || !(*map)[2] || !(*map)[3] ||
-		!(*map)[4] || !(*map)[5] || !(*map)[6] || !(*map)[7] ||
-		!(*map)[8]))
+	if (!(ft_anyat(map, sx, sy, 0)))
 		return (0);
+	m = sx * sy;
+	s = m * 2;
 	while (1)
 	{
-		r = rand() % 32;
-		if ((*map)[r % 16] == 0)
+		r = rand() % s;
+		if ((*map)[r % m] == 0)
 		{
-			(*map)[r % 16] = (r / 16) ? 2 : 4;
+			(*map)[r % m] = (r / m) ? 2 : 4;
 			break ;
 		}
 	}
-	return ((!(*map)[0] || !(*map)[1] || !(*map)[2] || !(*map)[3] ||
-		!(*map)[4] || !(*map)[5] || !(*map)[6] || !(*map)[7] ||
-		!(*map)[8]) || ((*map)[0] == (*map)[1] || (*map)[1] == (*map)[2] ||
-		(*map)[3] == (*map)[4] || (*map)[4] == (*map)[5] ||
-		(*map)[6] == (*map)[7] || (*map)[7] == (*map)[8] ||
-		(*map)[0] == (*map)[3] || (*map)[3] == (*map)[6] ||
-		(*map)[1] == (*map)[4] || (*map)[4] == (*map)[7] ||
-		(*map)[2] == (*map)[5] || (*map)[5] == (*map)[8]));
+	return (ft_anyat(map, sx, sy, 0) || ft_neighboor(map, sx, sy));
 }
 
 void		ft_putnbr(int n)
