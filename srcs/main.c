@@ -40,62 +40,6 @@ int		ft_continue(int map[][BUFF_SIZE], char sx, char sy)
 		(*map)[2] == (*map)[5] || (*map)[5] == (*map)[8]));
 }
 
-// int			ft_move(int map[][9], int mx, int my)
-// {
-// 	char	x;
-// 	char	y;
-// 	char	tx;
-// 	char	ty;
-// 	char	pursue;
-// 	char	m;
-// 	int	l;
-
-// 	l = 0;
-
-// 	y = 0;
-// 	m = 0;
-// 	pursue = 1;
-// 	while (pursue)// && !(pursue = 0))
-// 	{
-// 		pursue = 0;
-// 		l++;
-// 		while (y < 3)
-// 		{
-// 			x = 0;
-// 			while (x < 3)
-// 			{
-// 				if ((*map)[x + y * 3])
-// 				{
-// 					tx = x + mx;
-// 					ty = y + my;
-// 					if (tx >= 0 && tx < 3 && ty >= 0 && ty < 3)
-// 					{
-// 					dprintf(1, "x : %i, y : %i = %i vs tx : %i, ty : %i = %i\n", x, y, (*map)[x + y * 3], tx, ty, (*map)[tx + ty * 3]);
-// 						if (!(*map)[tx + ty * 3])
-// 						{
-// 							(*map)[tx + ty * 3] = (*map)[x + y * 3];
-// 							(*map)[x + y * 3] = 0;
-// 							pursue = 1;
-// 							m = 1;
-// 						}
-// 						else if ((*map)[x + y * 3] == (*map)[tx + ty * 3])
-// 						{
-// 							(*map)[x + y * 3] = 0;
-// 							(*map)[tx + ty * 3] *= 2;
-// 							pursue = 1;
-// 							m = 1;
-// 						}
-// 					}
-// 				}
-// 				x++;
-// 			}
-// 			y++;
-// 		}
-// 	}
-// 	dprintf(1, "Looped %i times, and m = %i\n", l, m);
-// 	return (m);
-// }
-
 void		ft_putnbr(int n)
 {
 	char	c;
@@ -161,14 +105,14 @@ char		ft_up(int map[][BUFF_SIZE], char sx, char sy)
 	while (l && !(l = 0))
 	{
 		y = 1;
-		while (sy < y)
+		while (y < sy)
 		{
 			x = 0;
 			while (x < sx)
 			{
 				if ((*map)[sx * y + x] && ((*map)[sx * (y - 1) + x] == 0 ||
 					((*map)[sx * y + x] == (*map)[sx * (y - 1) + x])) && (l = 1))
-					re = ft_move(map, 3, 0);
+					re = ft_move(map, sx * y + x, sx * (y - 1) + x);
 				x++;
 			}
 			y++;
@@ -188,15 +132,15 @@ char		ft_down(int map[][BUFF_SIZE], char sx, char sy)
 	re = 0;
 	while (l && !(l = 0))
 	{
-		y = sy;
-		while (y >= 0);
+		y = sy - 2;
+		while (y >= 0)
 		{
 			x = 0;
 			while (x < sx)
 			{
 				if ((*map)[sx * y + x] && ((*map)[sx * (y + 1) + x] == 0 ||
 					((*map)[sx * y + x] == (*map)[sx * (y + 1) + x])) && (l = 1))
-					re = ft_move(map, 3, 0);
+					re = ft_move(map, sx * y + x, sx * (y + 1) + x);
 				x++;
 			}
 			y--;
@@ -214,17 +158,17 @@ char		ft_left(int map[][BUFF_SIZE], char sx, char sy)
 
 	l = 1;
 	re = 0;
-	x = 1;
 	while (l && !(l = 0))
 	{
-		while (x < sx);
+		x = 1;
+		while (x < sx)
 		{
 			y = 0;
 			while (y < sy)
 			{
-				if ((*map)[sx * y + x] && ((*map)[sx * y + x + 1] == 0 ||
-					((*map)[sx * y + x] == (*map)[sx * y + x + 1])) && (l = 1))
-					re = ft_move(map, 3, 0);
+				if ((*map)[sx * y + x] && ((*map)[sx * y + x - 1] == 0 ||
+					((*map)[sx * y + x] == (*map)[sx * y + x - 1])) && (l = 1))
+					re = ft_move(map, sx * y + x, sx * y + x - 1);
 				y++;
 			}
 			x++;
@@ -242,17 +186,17 @@ char		ft_right(int map[][BUFF_SIZE], char sx, char sy)
 
 	l = 1;
 	re = 0;
-	x = sx - 1;
 	while (l && !(l = 0))
 	{
-		while (x >= 0);
+		x = sx - 2;
+		while (x >= 0)
 		{
 			y = 0;
 			while (y < sy)
 			{
-				if ((*map)[sx * y + x] && ((*map)[sx * y + x - 1] == 0 ||
-					((*map)[sx * y + x] == (*map)[sx * y + x - 1])) && (l = 1))
-					re = ft_move(map, 3, 0);
+				if ((*map)[sx * y + x] && ((*map)[sx * y + x + 1] == 0 ||
+					((*map)[sx * y + x] == (*map)[sx * y + x + 1])) && (l = 1))
+					re = ft_move(map, sx * y + x, sx * y + x + 1);
 				y++;
 			}
 			x--;
