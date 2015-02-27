@@ -1,0 +1,3 @@
+http://stackoverflow.com/questions/13707137/ncurses-resizing-glitch
+
+http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/
