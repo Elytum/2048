@@ -26,9 +26,9 @@ char *choices[] = {
 int n_choices = sizeof(choices) / sizeof(char *);
 void print_menu(WINDOW *menu_win, int highlight);
 
-intft_continue(int map[][BUFF_SIZE], char sx, char sy)
+int ft_continue(int map[][BUFF_SIZE], char sx, char sy)
 {
-	intr;
+	int r;
 
 	if (!(!(*map)[0] || !(*map)[1] || !(*map)[2] || !(*map)[3] ||
 		  !(*map)[4] || !(*map)[5] || !(*map)[6] || !(*map)[7] ||
@@ -54,9 +54,9 @@ intft_continue(int map[][BUFF_SIZE], char sx, char sy)
 }
 
 
-voidft_putnbr(int n)
+void ft_putnbr(int n)
 {
-	charc;
+	char c;
 
 	if (n > 9)
 	{
@@ -71,10 +71,10 @@ voidft_putnbr(int n)
 	}
 }
 
-voidft_drawmap(int map[BUFF_SIZE], char sx, char sy)
+void ft_drawmap(int map[BUFF_SIZE], char sx, char sy)
 {
-	intx;
-	inty;
+	int x;
+	int y;
 
 	write(1, "\nThe map is : \n", 15);
 	y = 0;
@@ -91,7 +91,7 @@ voidft_drawmap(int map[BUFF_SIZE], char sx, char sy)
 	}
 }
 
-charft_move(int map[][BUFF_SIZE], char past, char next)
+char ft_move(int map[][BUFF_SIZE], char past, char next)
 {
 	write (1, "\nMOVE\n", 6);
 	if ((*map)[next])
@@ -107,12 +107,12 @@ charft_move(int map[][BUFF_SIZE], char past, char next)
 	return (1);
 }
 
-charft_up(int map[][BUFF_SIZE], char sx, char sy)
+char ft_up(int map[][BUFF_SIZE], char sx, char sy)
 {
-	charl;
-	charre;
-	charx;
-	chary;
+	char l;
+	char re;
+	char x;
+	char y;
 
 	l = 1;
 	re = 0;
@@ -135,12 +135,12 @@ charft_up(int map[][BUFF_SIZE], char sx, char sy)
 	return (re);
 }
 
-charft_down(int map[][BUFF_SIZE], char sx, char sy)
+char ft_down(int map[][BUFF_SIZE], char sx, char sy)
 {
-	charl;
-	charre;
-	charx;
-	chary;
+	char l;
+	char re;
+	char x;
+	char y;
 
 	l = 1;
 	re = 0;
@@ -163,12 +163,12 @@ charft_down(int map[][BUFF_SIZE], char sx, char sy)
 	return (re);
 }
 
-charft_left(int map[][BUFF_SIZE], char sx, char sy)
+char ft_left(int map[][BUFF_SIZE], char sx, char sy)
 {
-	charl;
-	charre;
-	charx;
-	chary;
+	char l;
+	char re;
+	char x;
+	char y;
 
 	l = 1;
 	re = 0;
@@ -191,12 +191,12 @@ charft_left(int map[][BUFF_SIZE], char sx, char sy)
 	return (re);
 }
 
-charft_right(int map[][BUFF_SIZE], char sx, char sy)
+char ft_right(int map[][BUFF_SIZE], char sx, char sy)
 {
-	charl;
-	charre;
-	charx;
-	chary;
+	char l;
+	char re;
+	char x;
+	char y;
 
 	l = 1;
 	re = 0;
@@ -236,29 +236,22 @@ void handle_winch(int sig){
     }
     refresh();
 }
-
-intmain(void)
+void print_menu(WINDOW *menu_win, int highlight);
+int main(void)
 {
-	intmap[BUFF_SIZE] = {0};
-	charbuff[2] = {0};
-	intcheck;
-	intplay;
+	int map[BUFF_SIZE] = {0};
+	char buff[2] = {0};
+	int check;
+	int play;
     struct sigaction sa;
-
-
-
 	WINDOW *menu_win;
 	int highlight = 1;
 	int choice = 0;
 	int c;
-
 	initscr();
-	
-
     memset(&sa, 0, sizeof(struct sigaction));
     sa.sa_handler = handle_winch;
     sigaction(SIGWINCH, &sa, NULL);
-
 	clear();
 	noecho();
 	cbreak();/* Line buffering disabled. pass on everything */
@@ -271,12 +264,103 @@ intmain(void)
 
 	print_menu(menu_win, highlight);
 	while(1)
-	{
-		read(1, buff, 2);
+	{	c = wgetch(menu_win);
+		/*switch(c)
+		{
+			case KEY_UP:
+				if(highlight == 1)
+					highlight = n_choices;
+				else
+					--highlight;
+				break;
+			case KEY_DOWN:
+				if(highlight == n_choices)
+					highlight = 1;
+				else 
+					++highlight;
+				break;
+			case 10:
+				choice = highlight;
+				break;
+			default:
+				mvprintw(24, 0, "Charcter pressed is = %3d Hopefully it can be printed as '%c'", c, c);
+				refresh();
+				break;
+		} */
 		if (*buff == KEY_UP)
 		{
-		iY_UP:
 			if(highlight == 1)
-				inue(&map, 4, 4);
-			ft_drawmap(map, 4, 4);
-			
+				highlight = n_choices;
+			else
+				--highlight;
+			break;
+		}
+		if (*buff == KEY_DOWN)
+		{
+			if(highlight == n_choices)
+				highlight = 1;
+			else 
+				++highlight;
+			break;			
+		}
+		if (*buff == 10)
+		{
+			choice = highlight;
+			break ;
+		}
+		else
+		{
+			refresh();
+			break ;
+		}
+
+
+		print_menu(menu_win, highlight);
+		if(choice != 0)	/* User did a choice come out of the infinite loop */
+			break;
+	}	
+	mvprintw(23, 0, "You chose choice %d with choice string %s\n", choice, choices[choice - 1]);
+	clrtoeol();
+	refresh();
+	endwin();
+	check = 0;
+	play = 1;
+	ft_continue(&map, 4, 4);
+	ft_drawmap(map, 4, 4);
+	while (play)
+	{
+		read(1, buff, 2);
+		if (*buff == 'w')
+			check = ft_up(&map, 4, 4);
+		else if (*buff == 's')
+			check = ft_down(&map, 4, 4);
+		else if (*buff == 'a')
+			check = ft_left(&map, 4, 4);
+		else if (*buff == 'd')
+			check = ft_right(&map, 4, 4);
+		if (check && !(check = 0))
+			play = ft_continue(&map, 4, 4);
+		ft_drawmap(map, 4, 4);
+		buff[0] = '\0';
+	}
+}
+
+void print_menu(WINDOW *menu_win, int highlight)
+{
+	int x, y, i;	
+
+	x = 2;
+	y = 2;
+	box(menu_win, 0, 0);
+	for(i = 0; i < n_choices; ++i)
+	{	if(highlight == i + 1) /* High light the present choice */
+		{	wattron(menu_win, A_REVERSE); 
+			mvwprintw(menu_win, y, x, "%s", choices[i]);
+			wattroff(menu_win, A_REVERSE);
+		}
+		else
+			mvwprintw(menu_win, y, x, "%s", choices[i]);
+		++y;
+	}
+	wrefresh(menu_win);
+}
