@@ -17,10 +17,12 @@ int		ft_anyat(int map[][BUFF_SIZE], char sx, char sy, int value)
 {
 	int	max;
 
-	max = sx * sy;
+	max = sx * sy - 1;
 	while (max >= 0)
+	{
 		if ((*map)[max--] == value)
 			return (1);
+	}
 	return (0);
 }
 
@@ -36,12 +38,20 @@ int		ft_neighboor(int map[][BUFF_SIZE], char sx, char sy)
 		if (x > 0)
 		{
 			if ((*map)[sx * y + x] == (*map)[sx * y + x - 1])
+			{
+				dprintf(1, "Returning 1 with pos %i = %i & pos %i = %i\n",
+					sx * y + x, (*map)[sx * y + x], sx * y + x - 1,(*map)[sx * y + x - 1]);
 				return (1);
+			}
 		}
 		if (y > 0)
 		{
 			if ((*map)[sx * y + x] == (*map)[sx * (y - 1) + x])
+			{
+				dprintf(1, "Returning 1 with pos %i = %i & pos %i = %i\n",
+					sx * y + x, (*map)[sx * y + x], sx * (y - 1) + x,(*map)[sx * (y - 1) + x]);
 				return (1);
+			}
 		}
 		x++;
 		if (x > sx && ++y)
@@ -111,7 +121,6 @@ void		ft_drawmap(int map[BUFF_SIZE], char sx, char sy)
 
 char		ft_move(int map[][BUFF_SIZE], char past, char next)
 {
-	write (1, "\nMOVE\n", 6);
 	if ((*map)[next])
 	{
 		(*map)[next] *= 2;
