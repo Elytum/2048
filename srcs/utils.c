@@ -13,9 +13,9 @@
 #include "../includes/game_2048.h"
 #include <unistd.h>
 
-unsigned int				ft_intlen(unsigned int n)
+unsigned int		ft_intlen(unsigned int n)
 {
-	unsigned int			len;
+	unsigned int	len;
 
 	len = 1;
 	while (n > 0)

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../includes/game_2048.h"
+#include <unistd.h>
 
 static char	ft_move(t_env *e, unsigned int x1, unsigned int y1, unsigned int moves[2])
 {
@@ -22,19 +23,19 @@ static char	ft_move(t_env *e, unsigned int x1, unsigned int y1, unsigned int mov
 	if (e->map[y2 * e->x + x2])
 	{
 		e->map[y2 * e->x + x2] <<= 1;
+		e->player_score += e->map[y2 * e->x + x2];
 		e->map[y1 * e->x + x1] = 0;
+		return (1);
 	}
-	else
+	while (y2 > 0 && x2 > 0 && y2 < e-> y - 1 && x2 < e->x - 1 &&
+		!e->map[y2 * e->x + x2] &&
+		!e->map[(y2 + moves[1]) * e->x + x2 + moves[0]])
 	{
-		while (!e->map[y2 * e->x + x2] && y2 > 0 && y2 < e->y - 1 &&
-			x2 > 0 && x2 < e->x - 1)
-		{
-			x2 += moves[0];
-			y2 += moves[1];
-		}
-		e->map[y2 * e->x + x2] = e->map[y1 * e->x + x1];
-		e->map[y1 * e->x + x1] = 0;
+		x2 += moves[0];
+		y2 += moves[1];
 	}
+	e->map[y2 * e->x + x2] = e->map[y1 * e->x + x1];
+	e->map[y1 * e->x + x1] = 0;
 	return (1);
 }
 
@@ -75,7 +76,7 @@ char		ft_down(t_env *e)
 	moves[0] = 0;
 	moves[1] = 1;
 	y = e->y - 2;
-	while (y)
+	while (42)
 	{
 		x = 0;
 		while (x < e->x)
@@ -85,6 +86,8 @@ char		ft_down(t_env *e)
 				re = ft_move(e, x, y, moves);
 			x++;
 		}
+		if (!y)
+			return (re);
 		y--;
 	}
 	return (re);
@@ -127,7 +130,7 @@ char		ft_right(t_env *e)
 	moves[0] = 1;
 	moves[1] = 0;
 	x = e->x - 2;
-	while (x)
+	while (42)
 	{
 		y = 0;
 		while (y < e->y)
@@ -137,6 +140,8 @@ char		ft_right(t_env *e)
 				re = ft_move(e, x, y, moves);
 			y++;
 		}
+		if (!x)
+			return (re);
 		x--;
 	}
 	return (re);

@@ -18,6 +18,9 @@
 # include <termcap.h>
 # include <curses.h>
 
+# define QUIT1 "Do you wanna quit ? (Autosave)"
+# define QUIT2 "Enter to pursue"
+
 typedef struct		s_params
 {
 	char			**av;
@@ -49,6 +52,7 @@ typedef struct		s_env
 	unsigned int	sy;
 	char			play;
 	char			check;
+	char			pastkey;
 	char			*player_name;
 	unsigned int	player_name_len;
 	size_t			player_score;
