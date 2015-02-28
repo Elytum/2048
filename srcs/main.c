@@ -153,10 +153,10 @@ void			ft_event(t_env *e, int key)
 	e->play = ft_continue(e);
 }
 
-void			ft_save(t_env *e)
-{
-	int fd2 = open ("/tmp/test.svg", O_RDWR|O_CREAT,777);
-}
+// void			ft_save(t_env *e)
+// {
+// 	int fd = open ("/tmp/test.svg", O_RDWR|O_CREAT,777);
+// }
 
 void			ft_event_special(t_env *e, int key)
 {
@@ -204,5 +204,5 @@ int				main(int ac, char **av)
 	if (!(e = ft_init_env(ac, av)))
 		return (-1);
 	ft_loop(e);
-	ft_save(e);
+	// ft_save(e);
 }
