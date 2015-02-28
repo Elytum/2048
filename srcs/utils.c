@@ -69,9 +69,9 @@ void				ft_generaterandom(t_env *e)
 		return ;
 	while (42)
 	{
-		(*ptr == 0) ? r-- : r;
-		if (r == 0)
+		if (*ptr == 0 && r == 0)
 			break ;
+		(*ptr == 0) ? r-- : r;
 		ptr++;
 	}
 	*ptr = v;
