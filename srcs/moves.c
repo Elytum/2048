@@ -16,7 +16,7 @@ static char	ft_move(int **map, int past, int next)
 {
 	if ((*map)[next])
 	{
-		(*map)[next] <<= 2;
+		(*map)[next] <<= 1;
 		(*map)[past] = 0;
 	}
 	else

@@ -13,6 +13,28 @@
 #ifndef FT_SH1_H
 # define FT_SH1_H
 # include <stdlib.h>
+# include <signal.h>
+# include <termios.h>
+# include <termcap.h>
+# include <curses.h>
+
+typedef struct		s_params
+{
+	char			**av;
+	int				ac;
+	char			*v_term;
+	char			buf[2048];
+	struct termios	term;
+	struct termios	*oldterm;
+	char			r_char[4];
+	int				print;
+	tcflag_t		old_term;
+	int				c_pos_x;
+	int				c_pos_y;
+	int				l_count;
+	int				col_count;
+	int				max_size;
+}					t_params;
 
 typedef struct	s_env
 {
@@ -21,6 +43,7 @@ typedef struct	s_env
 	char		y;
 	char		play;
 	char		check;
+	t_params	*p;
 }				t_env;
 
 char			*ft_strnew(size_t n);

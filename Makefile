@@ -34,7 +34,7 @@ all:$(NAME)
 
 $(NAME):
 		$(CC) -c $(CFLAGS) $(addprefix $(BASEDIR)/, $(FILES))
-		$(CC) -o $(NAME) $(OBJECT)
+		$(CC) -o $(NAME) $(OBJECT) -L /usr/lib -ltermcap
 		bash -c "sh setIcon.sh icons/2048_icon.png $(NAME)"
 		bash -c "touch auteur && echo \"achazal\" > auteur"
 		bash -c "sh setIcon.sh icons/auteur_icon.png auteur"
