@@ -49,12 +49,14 @@ typedef struct		s_env
 	unsigned int	sy;
 	char			play;
 	char			check;
+	char			*player_name;
+	unsigned int	player_name_len;
 	t_params		*p;
 }					t_env;
 
 char				*ft_strnew(size_t n);
 void				*ft_memalloc(size_t size);
-void				ft_putnbr(int n);
+void				ft_putnbr(unsigned int n);
 char				ft_up(t_env *e);
 char				ft_down(t_env *e);
 char				ft_left(t_env *e);
@@ -66,4 +68,8 @@ int					ft_neighboor(t_env *e);
 int					ft_anyat(t_env *e, unsigned int value);
 unsigned int		ft_intlen(unsigned int n);
 
+size_t				ft_strlen(const char *str);
+char				*ft_strrev(char *str);
+char				*ft_strdup(const char *str);
+char				*ft_itoa(int n);
 #endif

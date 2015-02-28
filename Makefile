@@ -19,6 +19,7 @@ NAME = game_2048
 #--------------Sources----------------------#
 FILES =	main.c			\
 		libft.c			\
+		libft2.c		\
 		utils.c			\
 		moves.c
 

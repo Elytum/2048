@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../includes/game_2048.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "../includes/game_2048.h"
 #define WIDTH 4
 #define HEIGHT 4
 
@@ -30,7 +30,6 @@ void			ft_drawborder(unsigned int x1, unsigned int x2, unsigned int y1, unsigned
 {
 	unsigned	i;
 
-	mvprintw(0, 0, "x1 = %i, x2 = %i, y1 = %i, y2 = %i\n", x1, x2, y1, y2);
 	i = x1;
 	while (i <= x2)
 	{
@@ -64,7 +63,8 @@ void				ft_drawblocks(t_env *e)
 			len = ft_intlen(e->map[y * e->y + x]);
 			if (e->sbx - 2 >= len)
 				mvprintw((int)(e->boy + e->sby * (y + .5)),
-					e->box + e->sbx * x + 1 + (e->sbx - len - 1) / 2, "%i", e->map[y * e->y + x]);
+					e->box + e->sbx * x + 1 + (e->sbx - len) / 2, "%i",
+					e->map[y * e->y + x]);
 			x++;
 		}
 		y++;
@@ -83,10 +83,12 @@ t_env			*ft_init_env(int ac, char **av)
 	noecho();
 	curs_set(FALSE);
 	keypad(stdscr, TRUE);
+	// e->player_name = ft_strdup("Elytum");
+	// e->player_name_len = ft_strlen(e->player_name);
 	if (!(e->map = (unsigned int *)ft_memalloc(sizeof(unsigned int) *
 		(e->x * e->y))))
 		return (NULL);
-	// e->map[0] = 2048;
+	e->map[0] = 2048;
 	e->play = 1;
 	e->check = 0;
 	return (e);
@@ -102,13 +104,30 @@ unsigned int	ft_biggestword(t_env *e)
 
 	len = e->x * e->y - 1;
 	max = 0;
-	while (len)
+	while (42)
 	{
-		tmp = ft_intlen(e->map[len--]);
+		tmp = ft_intlen(e->map[len]);
 		if (tmp > max)
 			max = tmp;
+		if (!len)
+			break ;
+		len--;
 	}
 	return (max);
+}
+
+void			ft_actualize(t_env *e)
+{
+	e->sbx = e->sx / e->x - 1;
+	e->sby = e->sy / e->y - 1;
+	e->box = (e->sx - e->sbx * e->x) / 2;
+	e->boy = (e->sy - e->sby * e->y) / 2;
+}
+
+void			ft_refresh(t_env *e)
+{
+	mvprintw(0, (e->sx - e->player_name_len) / 2, e->player_name);
+	ft_drawblocks(e);
 }
 
 void			ft_loop(t_env *e)
@@ -116,16 +135,12 @@ void			ft_loop(t_env *e)
 	while (e->play)
 	{
 		getmaxyx(stdscr, e->sy, e->sx);
-		if (e->sy < 4 * e->y || e->sx < 4 * e->x || ft_biggestword(e) > e->x - 2)
+		ft_actualize(e);
+		if (e->sy < 3 * e->y || e->sx < 3 * e->x ||
+			ft_biggestword(e) > e->sbx - 2)// || e->player_name_len < e->sx)
 			mvprintw(0, 0, "Screen too little");
 		else
-		{
-			e->sbx = e->sx / e->x - 1;
-			e->sby = e->sy / e->y - 1;
-			e->box = (e->sx - e->sbx * e->x) / 2;
-			e->boy = (e->sy - e->sby * e->y) / 2;
 			ft_drawblocks(e);
-		}
 		refresh();
 		clear();
 		usleep(100000);
