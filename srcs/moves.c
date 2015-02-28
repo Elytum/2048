@@ -21,10 +21,10 @@ static char	ft_move(t_env *e, unsigned int x1, unsigned int y1, unsigned int mov
 	x2 = x1 + moves[0];
 	y2 = y1 + moves[1];
 //truc moche
-	if (e->map[y2 * e->x + x2] == 0)
-	{
-		x2 += moves[0];
-	}
+	// if (e->map[y2 * e->x + x2] == 0)
+	// {
+	// 	x2 += moves[0];
+	// }
 	//c est la "possibilite " qui crashait le moins ...
 	if (e->map[y2 * e->x + x2])
 	{
@@ -33,7 +33,7 @@ static char	ft_move(t_env *e, unsigned int x1, unsigned int y1, unsigned int mov
 		e->map[y1 * e->x + x1] = 0;
 		return (1);
 	}
-	while (y2 > 0 && x2 > 0 && y2 < e-> y - 1 && x2 < e->x - 1 &&
+	while (y2 > 0 && x2 > 0 && y2 < e->y - 1 && x2 < e->x - 1 &&
 		!e->map[y2 * e->x + x2] &&
 		!e->map[(y2 + moves[1]) * e->x + x2 + moves[0]])
 	{
