@@ -51,6 +51,7 @@ typedef struct		s_env
 	char			check;
 	char			*player_name;
 	unsigned int	player_name_len;
+	size_t			player_score;
 	t_params		*p;
 }					t_env;
 

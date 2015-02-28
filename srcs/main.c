@@ -83,12 +83,14 @@ t_env			*ft_init_env(int ac, char **av)
 	noecho();
 	curs_set(FALSE);
 	keypad(stdscr, TRUE);
-	// e->player_name = ft_strdup("Elytum");
-	// e->player_name_len = ft_strlen(e->player_name);
+	e->player_name = ft_strdup("Elytum");
+	e->player_name_len = ft_strlen(e->player_name);
+	e->player_score = 0;
 	if (!(e->map = (unsigned int *)ft_memalloc(sizeof(unsigned int) *
 		(e->x * e->y))))
 		return (NULL);
-	e->map[0] = 2048;
+	// e->map[0] = 2048;
+	ft_continue(e);
 	e->play = 1;
 	e->check = 0;
 	return (e);
@@ -127,20 +129,43 @@ void			ft_actualize(t_env *e)
 void			ft_refresh(t_env *e)
 {
 	mvprintw(0, (e->sx - e->player_name_len) / 2, e->player_name);
+	mvprintw(1, (e->sx - ft_intlen(e->player_score) - 8) / 2,
+		"Score : %i", e->player_score);
 	ft_drawblocks(e);
+}
+
+void			ft_event(t_env *e, int key)
+{
+	if (key == KEY_UP || key == 'w')
+		ft_up(e);
+	if (key == KEY_DOWN || key == 's')
+		ft_down(e);
+	if (key == KEY_LEFT || key == 'a')
+		ft_left(e);
+	if (key == KEY_RIGHT || key == 'd')
+		ft_right(e);
+	e->play = ft_continue(e);
 }
 
 void			ft_loop(t_env *e)
 {
+	int c;
+
 	while (e->play)
 	{
+		e->play = 0;
 		getmaxyx(stdscr, e->sy, e->sx);
 		ft_actualize(e);
 		if (e->sy < 3 * e->y || e->sx < 3 * e->x ||
-			ft_biggestword(e) > e->sbx - 2)// || e->player_name_len < e->sx)
+			ft_biggestword(e) > e->sbx - 2 || e->player_name_len > e->sx ||
+			e->sx < ft_intlen(e->player_score) + 8)
 			mvprintw(0, 0, "Screen too little");
 		else
-			ft_drawblocks(e);
+			ft_refresh(e);
+		c = wgetch(stdscr);
+		if (c == KEY_UP || c == KEY_DOWN || c == KEY_LEFT || c == KEY_RIGHT ||
+			c == 'w' || c == 's' || c == 'a' || c == 'd' || c == 27)
+			ft_event(e, c);
 		refresh();
 		clear();
 		usleep(100000);
