@@ -49,15 +49,15 @@ typedef struct	s_env
 char			*ft_strnew(size_t n);
 void			*ft_memalloc(size_t size);
 void			ft_putnbr(int n);
-char			ft_up(t_env *e);//char **map, char sx, char sy);
-char			ft_down(t_env *e);//char **map, char sx, char sy);
-char			ft_left(t_env *e);//char **map, char sx, char sy);
-char			ft_right(t_env *e);//char **map, char sx, char sy);
+char			ft_up(t_env *e);
+char			ft_down(t_env *e);
+char			ft_left(t_env *e);
+char			ft_right(t_env *e);
 int				ft_power2(char power);
-void			ft_drawmap(t_env *e);//char *map, char sx, char sy);
-void			ft_generaterandom(t_env *e);//char **map, char sx, char sy);
-int				ft_neighboor(t_env *e);//char **map, char sx, char sy);
-int				ft_anyat(t_env *e, int value);//char **map, char sx, char sy, int value);
+void			ft_drawmap(t_env *e);
+void			ft_generaterandom(t_env *e);
+int				ft_neighboor(t_env *e);
+int				ft_anyat(t_env *e, int value);
 
 
 #endif
