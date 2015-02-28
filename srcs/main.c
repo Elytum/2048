@@ -14,8 +14,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "../includes/game_2048.h"
-#define WIDTH 10
-#define HEIGHT 7
+#define WIDTH 4
+#define HEIGHT 4
 
 int				ft_continue(t_env *e)
 {
@@ -24,29 +24,6 @@ int				ft_continue(t_env *e)
 		return (0);
 	ft_generaterandom(e);
 	return (ft_anyat(e, 0) || ft_neighboor(e));
-}
-
-t_params		*ft_get_params(void)
-{
-	t_params	*p;
-
-	if (!(p = (t_params *)ft_memalloc(sizeof(t_params))))
-		return (NULL);
-	p->c_pos_x = 0;
-	p->c_pos_y = 0;
-	p->print = 0;
-	if (tgetent(p->buf, p->v_term) < 1)
-		return (NULL);
-	tcgetattr(0, &p->term);
-	p->term.c_lflag &= ~(ICANON);
-	p->term.c_lflag &= ~(ECHO);
-	p->term.c_cc[VMIN] = 1;
-	p->term.c_cc[VTIME] = 0;
-	if (tcsetattr(0, TCSADRAIN, &p->term) == -1)
-		return (NULL);
-	p->max_size = 1;
-	p->col_count = 1;
-	return (p);
 }
 
 void			ft_drawborder(unsigned int x1, unsigned int x2, unsigned int y1, unsigned int y2)
@@ -84,10 +61,10 @@ void				ft_drawblocks(t_env *e)
 		{
 			ft_drawborder(e->box + e->sbx * x, e->box + e->sbx * (x + 1),
 				e->boy + e->sby * y, e->boy + e->sby * (y + 1));
-			len = ft_intlen(e->map[y * e->sy + e->sx]);
+			len = ft_intlen(e->map[y * e->y + x]);
 			if (e->sbx - 2 >= len)
 				mvprintw((int)(e->boy + e->sby * (y + .5)),
-					e->box + e->sbx * x + 1 + (e->sbx - len) / 2, "%i", e->map[y * e->sy + e->sx]);
+					e->box + e->sbx * x + 1 + (e->sbx - len - 1) / 2, "%i", e->map[y * e->y + x]);
 			x++;
 		}
 		y++;
@@ -106,10 +83,10 @@ t_env			*ft_init_env(int ac, char **av)
 	noecho();
 	curs_set(FALSE);
 	keypad(stdscr, TRUE);
-	e->p = ft_get_params();
 	if (!(e->map = (unsigned int *)ft_memalloc(sizeof(unsigned int) *
 		(e->x * e->y))))
 		return (NULL);
+	// e->map[0] = 2048;
 	e->play = 1;
 	e->check = 0;
 	return (e);
