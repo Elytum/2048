@@ -41,7 +41,7 @@ static char	ft_move(t_env *e, unsigned int x1, unsigned int y1, unsigned int mov
 
 char		ft_up(t_env *e)
 {
-	char	re;
+	char			re;
 	unsigned int	moves[2];
 	unsigned int	x;
 	unsigned int	y;
@@ -67,7 +67,7 @@ char		ft_up(t_env *e)
 
 char		ft_down(t_env *e)
 {
-	char	re;
+	char			re;
 	unsigned int	moves[2];
 	unsigned int	x;
 	unsigned int	y;
@@ -95,7 +95,7 @@ char		ft_down(t_env *e)
 
 char		ft_left(t_env *e)
 {
-	char	re;
+	char			re;
 	unsigned int	moves[2];
 	unsigned int	x;
 	unsigned int	y;

@@ -67,9 +67,11 @@ void				ft_generaterandom(t_env *e)
 	ptr = e->map;
 	if (r == 0 && (*ptr = v))
 		return ;
-	while (r)
+	while (42)
 	{
 		(*ptr == 0) ? r-- : r;
+		if (r == 0)
+			break ;
 		ptr++;
 	}
 	*ptr = v;
