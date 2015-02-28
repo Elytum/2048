@@ -153,7 +153,6 @@ void			ft_loop(t_env *e)
 
 	while (e->play)
 	{
-		e->play = 0;
 		getmaxyx(stdscr, e->sy, e->sx);
 		ft_actualize(e);
 		if (e->sy < 3 * e->y || e->sx < 3 * e->x ||

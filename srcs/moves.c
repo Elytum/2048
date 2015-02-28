@@ -12,131 +12,132 @@
 
 #include "../includes/game_2048.h"
 
-static char	ft_move(unsigned int **map, int past, int next)
+static char	ft_move(t_env *e, unsigned int x1, unsigned int y1, unsigned int moves[2])
 {
-	if ((*map)[next])
+	unsigned int	x2;
+	unsigned int	y2;
+
+	x2 = x1 + moves[0];
+	y2 = y1 + moves[1];
+	if (e->map[y2 * e->x + x2])
 	{
-		(*map)[next] <<= 1;
-		(*map)[past] = 0;
+		e->map[y2 * e->x + x2] <<= 1;
+		e->map[y1 * e->x + x1] = 0;
 	}
 	else
 	{
-		(*map)[next] = (*map)[past];
-		(*map)[past] = 0;
+		while (!e->map[y2 * e->x + x2] && y2 > 0 && y2 < e->y - 1 &&
+			x2 > 0 && x2 < e->x - 1)
+		{
+			x2 += moves[0];
+			y2 += moves[1];
+		}
+		e->map[y2 * e->x + x2] = e->map[y1 * e->x + x1];
+		e->map[y1 * e->x + x1] = 0;
 	}
 	return (1);
 }
 
 char		ft_up(t_env *e)
 {
-	char	l;
 	char	re;
+	unsigned int	moves[2];
 	unsigned int	x;
 	unsigned int	y;
 
-	l = 1;
 	re = 0;
-	while (l && !(l = 0))
+	y = 1;
+	moves[0] = 0;
+	moves[1] = -1;
+	while (y < e->y)
 	{
-		y = 1;
-		while (y < e->y)
+		x = 0;
+		while (x < e->x)
 		{
-			x = 0;
-			while (x < e->x)
-			{
-				if (e->map[e->x * y + x] && (e->map[e->x * (y - 1) + x] == 0 ||
-					(e->map[e->x * y + x] == e->map[e->x * (y - 1) + x])) &&
-					(l = 1))
-					re = ft_move(&(e->map), e->x * y + x, e->x * (y - 1) + x);
-				x++;
-			}
-			y++;
+			if (e->map[e->x * y + x] && (e->map[e->x * (y - 1) + x] == 0 ||
+				(e->map[e->x * y + x] == e->map[e->x * (y - 1) + x])))
+				re = ft_move(e, x, y, moves);
+			x++;
 		}
+		y++;
 	}
 	return (re);
 }
 
 char		ft_down(t_env *e)
 {
-	char	l;
 	char	re;
+	unsigned int	moves[2];
 	unsigned int	x;
 	unsigned int	y;
 
-	l = 1;
 	re = 0;
-	while (l && !(l = 0))
+	moves[0] = 0;
+	moves[1] = 1;
+	y = e->y - 2;
+	while (y)
 	{
-		y = e->y - 2;
-		while (y)
+		x = 0;
+		while (x < e->x)
 		{
-			x = 0;
-			while (x < e->x)
-			{
-				if (e->map[e->x * y + x] && (e->map[e->x * (y + 1) + x] == 0 ||
-					(e->map[e->x * y + x] == e->map[e->x * (y + 1) + x])) &&
-					(l = 1))
-					re = ft_move(&(e->map), e->x * y + x, e->x * (y + 1) + x);
-				x++;
-			}
-			y--;
+			if (e->map[e->x * y + x] && (e->map[e->x * (y + 1) + x] == 0 ||
+				(e->map[e->x * y + x] == e->map[e->x * (y + 1) + x])))
+				re = ft_move(e, x, y, moves);
+			x++;
 		}
+		y--;
 	}
 	return (re);
 }
 
 char		ft_left(t_env *e)
 {
-	char	l;
 	char	re;
+	unsigned int	moves[2];
 	unsigned int	x;
 	unsigned int	y;
 
-	l = 1;
 	re = 0;
-	while (l && !(l = 0))
+	moves[0] = -1;
+	moves[1] = 0;
+	x = 1;
+	while (x < e->x)
 	{
-		x = 1;
-		while (x < e->x)
+		y = 0;
+		while (y < e->y)
 		{
-			y = 0;
-			while (y < e->y)
-			{
-				if (e->map[e->x * y + x] && (e->map[e->x * y + x - 1] == 0 ||
-					(e->map[e->x * y + x] == e->map[e->x * y + x - 1])) && (l = 1))
-					re = ft_move(&(e->map), e->x * y + x, e->x * y + x - 1);
-				y++;
-			}
-			x++;
+			if (e->map[e->x * y + x] && (e->map[e->x * y + x - 1] == 0 ||
+				(e->map[e->x * y + x] == e->map[e->x * y + x - 1])))
+				re = ft_move(e, x, y, moves);
+			y++;
 		}
+		x++;
 	}
 	return (re);
 }
 
 char		ft_right(t_env *e)
 {
-	char	l;
 	char	re;
+	unsigned int	moves[2];
 	unsigned int	x;
 	unsigned int	y;
 
-	l = 1;
 	re = 0;
-	while (l && !(l = 0))
+	moves[0] = 1;
+	moves[1] = 0;
+	x = e->x - 2;
+	while (x)
 	{
-		x = e->x - 2;
-		while (x)
+		y = 0;
+		while (y < e->y)
 		{
-			y = 0;
-			while (y < e->y)
-			{
-				if (e->map[e->x * y + x] && (e->map[e->x * y + x + 1] == 0 ||
-					(e->map[e->x * y + x] == e->map[e->x * y + x + 1])) && (l = 1))
-					re = ft_move(&(e->map), e->x * y + x, e->x * y + x + 1);
-				y++;
-			}
-			x--;
+			if (e->map[e->x * y + x] && (e->map[e->x * y + x + 1] == 0 ||
+				(e->map[e->x * y + x] == e->map[e->x * y + x + 1])))
+				re = ft_move(e, x, y, moves);
+			y++;
 		}
+		x--;
 	}
 	return (re);
 }
