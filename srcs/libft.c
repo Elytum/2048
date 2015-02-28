@@ -44,6 +44,23 @@ void		ft_putnbr(unsigned int n)
 	}
 }
 
+void		ft_putnbr_fd(int fd, unsigned int n)
+{
+	char	c;
+
+	if (n > 9)
+	{
+		ft_putnbr_fd(fd, n / 10);
+		c = n % 10 + '0';
+		write (fd, &c, 1);
+	}
+	else
+	{
+		c = n % 10 + '0';
+		write (fd, &c, 1);
+	}
+}
+
 void		*ft_memalloc(size_t size)
 {
 	void	*memory;

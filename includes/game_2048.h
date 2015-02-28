@@ -62,6 +62,7 @@ typedef struct		s_env
 char				*ft_strnew(size_t n);
 void				*ft_memalloc(size_t size);
 void				ft_putnbr(unsigned int n);
+void				ft_putnbr_fd(int fd, unsigned int n);
 char				ft_up(t_env *e);
 char				ft_down(t_env *e);
 char				ft_left(t_env *e);

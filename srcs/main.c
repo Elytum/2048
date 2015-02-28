@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <fcntl.h>
 #define WIDTH 4
 #define HEIGHT 4
 
@@ -153,10 +154,22 @@ void			ft_event(t_env *e, int key)
 	e->play = ft_continue(e);
 }
 
-// void			ft_save(t_env *e)
-// {
-// 	int fd = open ("/tmp/test.svg", O_RDWR|O_CREAT,777);
-// }
+void			ft_save(t_env *e)
+{
+	int fd;
+
+	if ((fd = open ("scores.txt", O_RDWR|O_CREAT|O_APPEND, 777)) == -1)
+		return ;
+	write (fd, e->player_name, e->player_name_len);
+	write (fd, " ", 1);
+	ft_putnbr_fd(fd, e->x);
+	write (fd, " ", 1);
+	ft_putnbr_fd(fd, e->y);
+	write (fd, " ", 1);
+	ft_putnbr_fd(fd, e->player_score);
+	write (fd, "\n", 1);
+	close(fd);
+}
 
 void			ft_event_special(t_env *e, int key)
 {
@@ -204,5 +217,6 @@ int				main(int ac, char **av)
 	if (!(e = ft_init_env(ac, av)))
 		return (-1);
 	ft_loop(e);
-	// ft_save(e);
+	endwin();
+	ft_save(e);
 }
