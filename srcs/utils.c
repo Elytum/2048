@@ -86,19 +86,16 @@ void				ft_drawmap(t_env *e)
 {
 	int				x;
 	int				y;
-	char			*str;
 
-	mvprintw(0, 0, "\nThe map is : \n");
+	mvprintw(0, 0, "The map is : ");
 	y = 0;
 	while (y < e->y)
 	{
 		x = 0;
 		while (x < e->x)
 		{
-			str = ft_itoa(e->map[y * e->y + x++]);
-			mvprintw(10 * y + 1, 10 * x, str);
-			mvprintw(10 * y + 1, 10 * x + ft_strlen(str), "\t");
-			free(str);
+			mvprintw(10 * y + 1, 10 * x, "%i\n", e->map[y * e->y + x]);
+			x++;
 		}
 		y++;
 	}

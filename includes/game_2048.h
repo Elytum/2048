@@ -41,6 +41,12 @@ typedef struct	s_env
 	int			*map;
 	char		x;
 	char		y;
+	int			sbx;
+	int			sby;
+	int			box;
+	int			boy;
+	int			sx;
+	int			sy;
 	char		play;
 	char		check;
 	t_params	*p;
