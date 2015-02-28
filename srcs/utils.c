@@ -13,43 +13,105 @@
 #include "../includes/game_2048.h"
 #include <unistd.h>
 
-// int			ft_power2(char power)
-// {
-// 	int		n;
-
-// 	n = 1;
-// 	while (power--)
-// 		n <<= 2;
-// 	return (n);
-// }
-
-void		ft_drawmap(t_env *e)
+size_t				ft_strlen(const char *str)
 {
-	int		x;
-	int		y;
+    register char	*ptr;
 
-	write(1, "\nThe map is : \n", 15);
+    ptr = (char *)str;
+    while (*ptr)
+        ptr++;
+    return (ptr - str);
+}
+
+char				*ft_strrev(char *str)
+{
+	char			*dst;
+	int				len;
+	int				i;
+
+	len = ft_strlen(str);
+	dst = (char *)malloc(sizeof(char) * (len + 1));
+	i = 0;
+	while (i < len)
+	{
+		dst[i] = str[len - i - 1];
+		i++;
+	}
+	dst[i] = '\0';
+	return (dst);
+}
+
+char				*ft_strdup(const char *str)
+{
+	register char	*strnew;
+	register char	*ptr;
+
+	strnew = (char *)malloc(sizeof(char) * ft_strlen(str) + 1);
+	ptr = strnew;
+	while (*str)
+		*ptr++ = *str++;
+	*ptr = '\0';
+	return (strnew);
+}
+
+char				*ft_itoa(int n)
+{
+	char			*str;
+	int				pos;
+	int				tmp;
+
+	pos = 0;
+	tmp = n;
+	if (n == -2147483648)
+		return (ft_strdup("-2147483648"));
+	if (n == 0)
+		return (ft_strdup("0"));
+	if (!(str = (char *)malloc(sizeof(char) * 12)))
+		return (NULL);
+	if (n < 0)
+		n *= -1;
+	while (n > 0)
+	{
+		str[pos++] = (n % 10) + 48;
+		n = n / 10;
+	}
+	str[pos] = '\0';
+	if (tmp < 0)
+		str[pos++] = '-';
+	str[pos] = '\0';
+	return (ft_strrev(str));
+}
+
+void				ft_drawmap(t_env *e)
+{
+	int				x;
+	int				y;
+	char			*str;
+
+	mvprintw(0, 0, "\nThe map is : \n");
 	y = 0;
 	while (y < e->y)
 	{
 		x = 0;
 		while (x < e->x)
 		{
-			ft_putnbr(e->map[y * e->y + x++]);
-			write (1, "\t", 1);
+			str = ft_itoa(e->map[y * e->y + x++]);
+			mvprintw(10 * y + 1, 10 * x, str);
+			mvprintw(10 * y + 1, 10 * x + ft_strlen(str), "\t");
+			free(str);
 		}
-		write (1, "\n", 1);
 		y++;
 	}
+	refresh();
 }
 
-void		ft_generaterandom(t_env *e)
+void				ft_generaterandom(t_env *e)
 {
-	int		r;
-	int		v;
-	int		nb;
-	int		*ptr;
-	int		max;
+	int				r;
+	int				v;
+	int				nb;
+	int				*ptr;
+	int				max;
 
 	max = e->x * e->y;
 	ptr = e->map;
@@ -72,10 +134,10 @@ void		ft_generaterandom(t_env *e)
 	*ptr = v;
 }
 
-int			ft_neighboor(t_env *e)
+int					ft_neighboor(t_env *e)
 {
-	int		x;
-	int		y;
+	int				x;
+	int				y;
 
 	x = 0;
 	y = 0;
@@ -98,9 +160,9 @@ int			ft_neighboor(t_env *e)
 	return (0);
 }
 
-int			ft_anyat(t_env *e, int value)
+int					ft_anyat(t_env *e, int value)
 {
-	int		max;
+	int				max;
 
 	max = e->x * e->y - 1;
 	while (max >= 0)

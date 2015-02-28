@@ -55,6 +55,9 @@ t_env			*ft_init_env(int ac, char **av)
 
 	if (!(e = (t_env *)ft_memalloc(sizeof(t_env))))
 		return (NULL);
+	initscr();
+	noecho();
+	curs_set(FALSE);
 	e->p = ft_get_params();
 	e->x = WIDTH;
 	e->y = HEIGHT;
