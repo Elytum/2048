@@ -13,6 +13,19 @@
 #include "../includes/game_2048.h"
 #include <unistd.h>
 
+unsigned int		ft_intlen(unsigned int n)
+{
+	unsigned int	len;
+
+	len = 1;
+	while (n > 0)
+	{
+		n /= 10;
+		len++;
+	}
+	return (len);
+}
+
 size_t				ft_strlen(const char *str)
 {
     register char	*ptr;
@@ -84,8 +97,8 @@ char				*ft_itoa(int n)
 
 void				ft_drawmap(t_env *e)
 {
-	int				x;
-	int				y;
+	unsigned int	x;
+	unsigned int	y;
 
 	mvprintw(0, 0, "The map is : ");
 	y = 0;
@@ -107,7 +120,7 @@ void				ft_generaterandom(t_env *e)
 	int				r;
 	int				v;
 	int				nb;
-	int				*ptr;
+	unsigned int	*ptr;
 	int				max;
 
 	max = e->x * e->y;
@@ -133,8 +146,8 @@ void				ft_generaterandom(t_env *e)
 
 int					ft_neighboor(t_env *e)
 {
-	int				x;
-	int				y;
+	unsigned		x;
+	unsigned		y;
 
 	x = 0;
 	y = 0;
@@ -157,12 +170,12 @@ int					ft_neighboor(t_env *e)
 	return (0);
 }
 
-int					ft_anyat(t_env *e, int value)
+int					ft_anyat(t_env *e, unsigned int value)
 {
-	int				max;
+	unsigned int	max;
 
 	max = e->x * e->y - 1;
-	while (max >= 0)
+	while (max)
 	{
 		if (e->map[max--] == value)
 			return (1);

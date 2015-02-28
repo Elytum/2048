@@ -36,34 +36,34 @@ typedef struct		s_params
 	int				max_size;
 }					t_params;
 
-typedef struct	s_env
+typedef struct		s_env
 {
-	int			*map;
-	char		x;
-	char		y;
-	int			sbx;
-	int			sby;
-	int			box;
-	int			boy;
-	int			sx;
-	int			sy;
-	char		play;
-	char		check;
-	t_params	*p;
-}				t_env;
+	unsigned int	*map;
+	unsigned int	x;
+	unsigned int	y;
+	unsigned int	sbx;
+	unsigned int	sby;
+	unsigned int	box;
+	unsigned int	boy;
+	unsigned int	sx;
+	unsigned int	sy;
+	char			play;
+	char			check;
+	t_params		*p;
+}					t_env;
 
-char			*ft_strnew(size_t n);
-void			*ft_memalloc(size_t size);
-void			ft_putnbr(int n);
-char			ft_up(t_env *e);
-char			ft_down(t_env *e);
-char			ft_left(t_env *e);
-char			ft_right(t_env *e);
-int				ft_power2(char power);
-void			ft_drawmap(t_env *e);
-void			ft_generaterandom(t_env *e);
-int				ft_neighboor(t_env *e);
-int				ft_anyat(t_env *e, int value);
-
+char				*ft_strnew(size_t n);
+void				*ft_memalloc(size_t size);
+void				ft_putnbr(int n);
+char				ft_up(t_env *e);
+char				ft_down(t_env *e);
+char				ft_left(t_env *e);
+char				ft_right(t_env *e);
+int					ft_power2(char power);
+void				ft_drawmap(t_env *e);
+void				ft_generaterandom(t_env *e);
+int					ft_neighboor(t_env *e);
+int					ft_anyat(t_env *e, unsigned int value);
+unsigned int		ft_intlen(unsigned int n);
 
 #endif

@@ -12,7 +12,7 @@
 
 #include "../includes/game_2048.h"
 
-static char	ft_move(int **map, int past, int next)
+static char	ft_move(unsigned int **map, int past, int next)
 {
 	if ((*map)[next])
 	{
@@ -31,8 +31,8 @@ char		ft_up(t_env *e)
 {
 	char	l;
 	char	re;
-	char	x;
-	char	y;
+	unsigned int	x;
+	unsigned int	y;
 
 	l = 1;
 	re = 0;
@@ -60,15 +60,15 @@ char		ft_down(t_env *e)
 {
 	char	l;
 	char	re;
-	char	x;
-	char	y;
+	unsigned int	x;
+	unsigned int	y;
 
 	l = 1;
 	re = 0;
 	while (l && !(l = 0))
 	{
 		y = e->y - 2;
-		while (y >= 0)
+		while (y)
 		{
 			x = 0;
 			while (x < e->x)
@@ -89,8 +89,8 @@ char		ft_left(t_env *e)
 {
 	char	l;
 	char	re;
-	char	x;
-	char	y;
+	unsigned int	x;
+	unsigned int	y;
 
 	l = 1;
 	re = 0;
@@ -117,15 +117,15 @@ char		ft_right(t_env *e)
 {
 	char	l;
 	char	re;
-	char	x;
-	char	y;
+	unsigned int	x;
+	unsigned int	y;
 
 	l = 1;
 	re = 0;
 	while (l && !(l = 0))
 	{
 		x = e->x - 2;
-		while (x >= 0)
+		while (x)
 		{
 			y = 0;
 			while (y < e->y)

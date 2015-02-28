@@ -14,8 +14,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "../includes/game_2048.h"
-#define HEIGHT 5
-#define WIDTH 5
+#define WIDTH 10
+#define HEIGHT 7
 
 int				ft_continue(t_env *e)
 {
@@ -49,9 +49,9 @@ t_params		*ft_get_params(void)
 	return (p);
 }
 
-void			ft_drawborder(int x1, int x2, int y1, int y2)
+void			ft_drawborder(unsigned int x1, unsigned int x2, unsigned int y1, unsigned int y2)
 {
-	int			i;
+	unsigned	i;
 
 	mvprintw(0, 0, "x1 = %i, x2 = %i, y1 = %i, y2 = %i\n", x1, x2, y1, y2);
 	i = x1;
@@ -68,16 +68,15 @@ void			ft_drawborder(int x1, int x2, int y1, int y2)
 		mvprintw(i, x2, "|");
 		i++;
 	}
-	return ;
 }
 
-void			ft_drawsquares(t_env *e)
+void				ft_drawblocks(t_env *e)
 {
-	int			x;
-	int			y;
+	unsigned int	x;
+	unsigned int	y;
+	unsigned int	len;
 
 	y = 0;
-	// ft_drawborder(0, 20, 0, 10);
 	while (y < e->y)
 	{
 		x = 0;
@@ -85,12 +84,14 @@ void			ft_drawsquares(t_env *e)
 		{
 			ft_drawborder(e->box + e->sbx * x, e->box + e->sbx * (x + 1),
 				e->boy + e->sby * y, e->boy + e->sby * (y + 1));
+			len = ft_intlen(e->map[y * e->sy + e->sx]);
+			if (e->sbx - 2 >= len)
+				mvprintw((int)(e->boy + e->sby * (y + .5)),
+					e->box + e->sbx * x + 1 + (e->sbx - len) / 2, "%i", e->map[y * e->sy + e->sx]);
 			x++;
 		}
 		y++;
 	}
-	return ;
-	// e++;
 }
 
 t_env			*ft_init_env(int ac, char **av)
@@ -106,7 +107,8 @@ t_env			*ft_init_env(int ac, char **av)
 	curs_set(FALSE);
 	keypad(stdscr, TRUE);
 	e->p = ft_get_params();
-	if (!(e->map = ft_memalloc(sizeof(int) * (e->x * e->y))))
+	if (!(e->map = (unsigned int *)ft_memalloc(sizeof(unsigned int) *
+		(e->x * e->y))))
 		return (NULL);
 	e->play = 1;
 	e->check = 0;
@@ -115,12 +117,29 @@ t_env			*ft_init_env(int ac, char **av)
 	av++;
 }
 
+unsigned int	ft_biggestword(t_env *e)
+{
+	unsigned int max;
+	unsigned int len;
+	unsigned int tmp;
+
+	len = e->x * e->y - 1;
+	max = 0;
+	while (len)
+	{
+		tmp = ft_intlen(e->map[len--]);
+		if (tmp > max)
+			max = tmp;
+	}
+	return (max);
+}
+
 void			ft_loop(t_env *e)
 {
 	while (e->play)
 	{
 		getmaxyx(stdscr, e->sy, e->sx);
-		if (e->sy < 4 * e->y || e->sx < 4 * e->x)
+		if (e->sy < 4 * e->y || e->sx < 4 * e->x || ft_biggestword(e) > e->x - 2)
 			mvprintw(0, 0, "Screen too little");
 		else
 		{
@@ -128,7 +147,7 @@ void			ft_loop(t_env *e)
 			e->sby = e->sy / e->y - 1;
 			e->box = (e->sx - e->sbx * e->x) / 2;
 			e->boy = (e->sy - e->sby * e->y) / 2;
-			ft_drawsquares(e);
+			ft_drawblocks(e);
 		}
 		refresh();
 		clear();

@@ -26,7 +26,7 @@ char		*ft_strnew(size_t n)
 	return (str);
 }
 
-void		ft_putnbr(int n)
+void		ft_putnbr(unsigned int n)
 {
 	char	c;
 
